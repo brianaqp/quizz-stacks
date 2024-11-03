@@ -1,6 +1,8 @@
 'use client';
 
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react"
+
 
 const mockData = [{
     id: 0,
@@ -10,58 +12,70 @@ const mockData = [{
     question: "Question placeholder 2",
 }];
 
+type Answer = "angular" | "vue" | "next"| "svelte";
+
 export default function Play() {
+    const [storedAnswers, setStoredAnswers] = useState<Answer[]>([]); //  Needs an state?
     const [question, setQuestion] = useState(mockData[0]);
+    const [answer, setAnswer] = useState<Answer | null>(null)
+
     // Handlers
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleAnswerChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value as Answer;  // Type guard
+        if (value === answer) {
+            setAnswer(null);
+        } else {
+            setAnswer(value)
+        }
+    };
+
+    const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        // Next question
         // 1. Form validation
-        // 2. Store answer
-        // 3. Next
-        setQuestion(mockData[1]);
-    }
+        if (answer === null) {
+            // Show some error
+            console.error("Error! Answer is null");
+        } else {
+            // 2. Store answer
+            setStoredAnswers([...storedAnswers, answer])
+            // 3. Next
+            const nextId = question.id + 1; 
+            if (nextId > mockData.length - 1) {
+                // Finish!
+                console.log("game ended")
+            } else {
+                setAnswer(null);
+                setQuestion(mockData[nextId]);
+            }
+        }
+    };
+    
+    // HTML
     return (
         <div className="mx-[25%] text-center">
-            <Card data={question} />
-            <button type="button" onClick={handleClick}>Next</button>
-        </div>
-    )
-}
-
-function Card({ data }: {
-    data: {
-        id: number,
-        question: string,
-    }
-}) {
-    const [answer, setAnswer] = useState<string | null>(null)
-    // Handlers
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setAnswer(e.target.value)
-    }
-    return (
-        <div className="card">
-            <h1 className="">{data.id + 1}</h1>
-            <p>{data.question}</p>
-            <ul>
-                <li>
-                    <input type="checkbox" checked={ answer === "angular"} onChange={handleChange} value="angular"/>
-                    <label htmlFor="first">Angular</label>
-                </li>
-                <li>
-                    <input type="checkbox" checked={ answer === "next"} onChange={handleChange} value="next"/>
-                    <label>Next.js / Vanilla React</label>
-                </li>
-                <li>
-                    <input type="checkbox" checked={ answer === "vue"} onChange={handleChange} value="vue"/>
-                    <label htmlFor="first">Vue</label>
-                </li>
-                <li>
-                    <input type="checkbox" checked={ answer === "svelte"} onChange={handleChange} value="svelte"/>
-                    <label htmlFor="first">Svelte</label>
-                </li>
-            </ul>
+            <div className="card">
+                <h1 className="">{question.id + 1}</h1>
+                <p>{question.question}</p>
+                <ul>
+                    <li>
+                        <input type="checkbox" checked={ answer === "angular"} onChange={handleAnswerChange} value="angular"/>
+                        <label htmlFor="first">Angular</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" checked={ answer === "next"} onChange={handleAnswerChange} value="next"/>
+                        <label>Next.js / Vanilla React</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" checked={ answer === "vue"} onChange={handleAnswerChange} value="vue"/>
+                        <label htmlFor="first">Vue</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" checked={ answer === "svelte"} onChange={handleAnswerChange} value="svelte"/>
+                        <label htmlFor="first">Svelte</label>
+                    </li>
+                    <button type="button" onClick={handleNextClick}>Next</button>
+                </ul>
+            </div>
         </div>
     )
 }
