@@ -1,13 +1,13 @@
-import "./globals.css";
+import "./globals.css"
+import Navbar from "./navbar"
 
-type Props = { children: React.ReactNode }
-
-export default function RootLayout({ children }: Readonly<Props>) {
-  return (
-    <html lang="en">
-      <body>
-          <main>{children}</main>
-      </body>
-    </html>
-  );
+export default function RootLayout({children}: {children: React.ReactNode}) {
+    return (
+        <html lang="en">
+            <body>
+                <Navbar />
+                <main>{children}</main>
+            </body>
+        </html>
+    )
 }
