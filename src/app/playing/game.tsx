@@ -36,7 +36,18 @@ export default function Play({ data }: { data: any }) {
             const nextId = index + 1;
             if (nextId > 1) { // [ ] data.length - 1
                 // Game end!
-                router.push("/finish")
+                fetch("/api/save", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        message: "secret code"
+                    })
+                }).then((res) => {
+                    if (res.ok) {
+                        router.push("/finish?id="+1, {
+                        })
+                    }
+                })
+                // router.push("/finish")
             } else {
                 setAnswer(null);
                 setIndex(nextId);
@@ -49,7 +60,7 @@ export default function Play({ data }: { data: any }) {
         <div className="mx-[25%] text-center">
             <div className="card">
                 <h1 className="">{data[index].id}</h1>
-                <p>{data[index].question}</p>
+                <p>{data[index].text}</p>
                 <ul>
                     <li>
                         <input type="checkbox" checked={ answer === "angular"} onChange={handleAnswerChange} value="angular"/>

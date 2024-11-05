@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Quizz {
+  id        Int         @id @default(autoincrement())
+  name      String?     @db.VarChar(255)
+  questions Questions[]
+  entries   Entries[]
+}
+
+model Questions {
+  id       Int     @id @default(autoincrement())
+  quizz_id Int
+  text     String
+  value    Int
+  quizz    Quizz   @relation(fields: [quizz_id], references: [id])
+
+  @@map("Questions")
+}
+
+model Entries {
+  id       Int     @id @default(autoincrement())
+  quizz_id Int
+  angular  Int
+  vue      Int
+  svelte   Int
+  react    Int
+  quizz    Quizz   @relation(fields: [quizz_id], references: [id])
+
+  @@map("Entries")
+}
