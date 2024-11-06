@@ -3,14 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-
 export async function GET(
   request: NextRequest,
   {
     params,
   }: {
     params: { id: string };
-  }
+  },
 ): Promise<NextResponse> {
   try {
     // Get the ID from the params
@@ -27,7 +26,7 @@ export async function GET(
     if (!entry) {
       return NextResponse.json(
         { success: false },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -36,7 +35,12 @@ export async function GET(
     let top: $Enums.FrameworkCategory | undefined;
 
     // Check for the highest framework value
-    const props: $Enums.FrameworkCategory[] = ['angular', 'vue', 'react', 'svelte'];
+    const props: $Enums.FrameworkCategory[] = [
+      'angular',
+      'vue',
+      'react',
+      'svelte',
+    ];
 
     for (let prop of props) {
       const value = entry[prop];
@@ -52,13 +56,13 @@ export async function GET(
         success: true,
         data: top,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { success: false, error: 'Error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

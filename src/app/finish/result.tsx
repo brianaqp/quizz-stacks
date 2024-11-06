@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import ErrorPage from "./error";
+import ErrorPage from './error';
 
 type Results = {
   [framework: string]: {
@@ -37,22 +37,31 @@ type FinishContentProps = {
   resultFramework: keyof Results; // Restrict to valid keys of `results`
 };
 
-export default function FinishContent({ resultFramework }: FinishContentProps) {
+export default function FinishContent({
+  resultFramework,
+}: FinishContentProps) {
   const router = useRouter();
 
   // Find the result by its framework name (case insensitive)
-  if (typeof resultFramework === "number") {
-    return <ErrorPage></ ErrorPage>
+  if (typeof resultFramework === 'number') {
+    return <ErrorPage></ErrorPage>;
   }
 
   const winner = results[resultFramework] || results.react; // Default to React if not found
 
   return (
     <div className="w-[600px] mx-auto mt-[25%] bg-blue-200 border-2 rounded-lg">
-      <div className="title text-2xl ml-10 mt-5">Your framework! {winner.framework}</div>
-      <div className="description m-10">{winner.answer}</div>
+      <div className="title text-2xl ml-10 mt-5">
+        Your framework! {winner.framework}
+      </div>
+      <div className="description m-10">
+        {winner.answer}
+      </div>
       <div className="footer m-10">
-        <button className="w-30 px-2 border-2 rounded-lg" onClick={() => router.push('/')}>
+        <button
+          className="w-30 px-2 border-2 rounded-lg"
+          onClick={() => router.push('/')}
+        >
           Play again
         </button>
       </div>

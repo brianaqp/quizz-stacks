@@ -11,7 +11,8 @@ export default function Play({
   data: QuestionsWithOptions;
 }) {
   const [index, setIndex] = useState(0);
-  const [answer, setAnswer] = useState<$Enums.FrameworkCategory | null>(null);
+  const [answer, setAnswer] =
+    useState<$Enums.FrameworkCategory | null>(null);
   const [result, setResult] = useState({
     angular: 0,
     vue: 0,
@@ -25,7 +26,8 @@ export default function Play({
   const handleAnswerChange = (
     e: ChangeEvent<HTMLInputElement>,
   ) => {
-    const value = e.target.value as $Enums.FrameworkCategory; // Type guard
+    const value = e.target
+      .value as $Enums.FrameworkCategory; // Type guard
     if (value === answer) {
       setAnswer(null);
     } else {
@@ -45,7 +47,7 @@ export default function Play({
     } else {
       // 2. Store answer (adding the value of the selected framework to the result)
       const selectedOption = data[index].options.find(
-        (option) => option.category === answer
+        (option) => option.category === answer,
       );
       if (selectedOption) {
         result[answer] += data[index].value;
@@ -69,7 +71,7 @@ export default function Play({
             if (res.success) {
               router.push('/finish?entryId=' + res.data.id);
             }
-          })
+          });
       } else {
         setAnswer(null);
         setIndex(nextId);

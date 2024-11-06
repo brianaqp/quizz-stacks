@@ -41,24 +41,24 @@ export async function POST(
     if (result.length === 0) {
       return NextResponse.json(
         { success: false },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
-    console.log(data)
+    console.log(data);
 
     return NextResponse.json(
       {
         success: true,
         data: result[0],
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { success: false, error: 'Error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

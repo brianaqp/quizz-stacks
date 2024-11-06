@@ -14,7 +14,8 @@ type QuizzTypePayload = Prisma.QuizzGetPayload<{
   };
 }>;
 
-export type QuestionsWithOptions = QuizzTypePayload['questions'];
+export type QuestionsWithOptions =
+  QuizzTypePayload['questions'];
 
 export default async function Page() {
   const QUIZZ_ID = 1;
@@ -26,10 +27,10 @@ export default async function Page() {
     include: {
       questions: {
         include: {
-          options: true
-        }
-      }
-    }
+          options: true,
+        },
+      },
+    },
   });
 
   if (quizz === null || quizz.questions.length === 0) {
@@ -37,7 +38,8 @@ export default async function Page() {
   }
 
   // Aquí ya tienes las preguntas con sus opciones incluidas
-  const questionsWithOptions: QuestionsWithOptions = quizz.questions;
+  const questionsWithOptions: QuestionsWithOptions =
+    quizz.questions;
 
   return <Play data={questionsWithOptions}></Play>;
 }
