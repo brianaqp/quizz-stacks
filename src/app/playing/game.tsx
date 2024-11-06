@@ -1,15 +1,21 @@
 'use client';
 
+import { Questions } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react"
 
-type Answer = "angular" | "vue" | "next"| "svelte";
+type Answer = "angular" | "vue" | "react"| "svelte";
 
-export default function Play({ data }: { data: any }) {
-    const [storedAnswers, setStoredAnswers] = useState<Answer[]>([]); //  Needs an state?
+export default function Play({ data }: { data: Array<Questions> }) {
     const [index, setIndex] = useState(0);
     const [answer, setAnswer] = useState<Answer | null>(null)
+    const [result, setResult] = useState({
+        angular:0,  
+        vue:0,      
+        svelte:0,   
+        react:0,    
+    });
 
     const router = useRouter();
 
@@ -31,23 +37,24 @@ export default function Play({ data }: { data: any }) {
             console.error("Error! Answer is null");
         } else {
             // 2. Store answer
-            setStoredAnswers([...storedAnswers, answer])
+            result[answer] += data[index].value;
+            setResult({...result})
             // 3. Next
             const nextId = index + 1;
             if (nextId > 1) { // [ ] data.length - 1
-                // Game end!
-                fetch("/api/save", {
+                const url = "/api/save/" + data[0].quizz_id;
+                
+                fetch(url, {
                     method: "POST",
-                    body: JSON.stringify({
-                        message: "secret code"
-                    })
+                    body: JSON.stringify(result)
                 }).then((res) => {
-                    if (res.ok) {
-                        router.push("/finish?id="+1, {
-                        })
+                    return res.json()
+                }).then((res) => {
+                    if (res.success) {
+                        router.push("/finish?id="+res.data.id)
+                        console.log("push")
                     }
                 })
-                // router.push("/finish")
             } else {
                 setAnswer(null);
                 setIndex(nextId);
@@ -67,7 +74,7 @@ export default function Play({ data }: { data: any }) {
                         <label htmlFor="first">Angular</label>
                     </li>
                     <li>
-                        <input type="checkbox" checked={ answer === "next"} onChange={handleAnswerChange} value="next"/>
+                        <input type="checkbox" checked={ answer === "react"} onChange={handleAnswerChange} value="next"/>
                         <label>Next.js / Vanilla React</label>
                     </li>
                     <li>
