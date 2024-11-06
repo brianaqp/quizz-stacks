@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { Questions } from "@prisma/client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { Questions } from '@prisma/client';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, useState } from 'react';
 
-type Answer = "angular" | "vue" | "react" | "svelte";
+type Answer = 'angular' | 'vue' | 'react' | 'svelte';
 
-export default function Play({ data }: { data: Array<Questions> }) {
+export default function Play({
+  data,
+}: {
+  data: Array<Questions>;
+}) {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [result, setResult] = useState({
@@ -20,7 +24,9 @@ export default function Play({ data }: { data: Array<Questions> }) {
   const router = useRouter();
 
   // Handlers
-  const handleAnswerChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAnswerChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
     const value = e.target.value as Answer; // Type guard
     if (value === answer) {
       setAnswer(null);
@@ -29,24 +35,28 @@ export default function Play({ data }: { data: Array<Questions> }) {
     }
   };
 
-  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNextClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     e.stopPropagation();
     // 1. Form validation
     if (answer === null) {
       // Show some error
-      console.error("Error! Answer is null");
+      console.error('Error! Answer is null');
     } else {
       // 2. Store answer
       result[answer] += data[index].value;
-      setResult({ ...result });
+      setResult({
+        ...result,
+      });
       // 3. Next
       const nextId = index + 1;
       if (nextId > 1) {
         // [ ] data.length - 1
-        const url = "/api/save/" + data[0].quizz_id;
+        const url = '/api/save/' + data[0].quizz_id;
 
         fetch(url, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(result),
         })
           .then((res) => {
@@ -54,8 +64,8 @@ export default function Play({ data }: { data: Array<Questions> }) {
           })
           .then((res) => {
             if (res.success) {
-              router.push("/finish?id=" + res.data.id);
-              console.log("push");
+              router.push('/finish?id=' + res.data.id);
+              console.log('push');
             }
           });
       } else {
@@ -69,7 +79,9 @@ export default function Play({ data }: { data: Array<Questions> }) {
   return (
     <div className="text-center bg-blue-300 mt-[10%] w-[400px] h-[500px] mx-auto border-2 justify-around rounded-r-md border-green-400 flex flex-col gap-[50px] flex-nowrap">
       <div className="header">
-        <p className="text-2xl">Question number {data[index].id}</p>
+        <p className="text-2xl">
+          Question number {data[index].id}
+        </p>
       </div>
       <div className="body mx-10">
         <span className="text-xl">{data[index].text}</span>
@@ -78,7 +90,7 @@ export default function Play({ data }: { data: Array<Questions> }) {
         <label>
           <input
             type="checkbox"
-            checked={answer === "angular"}
+            checked={answer === 'angular'}
             onChange={handleAnswerChange}
             value="angular"
           />
@@ -87,7 +99,7 @@ export default function Play({ data }: { data: Array<Questions> }) {
         <label>
           <input
             type="checkbox"
-            checked={answer === "react"}
+            checked={answer === 'react'}
             onChange={handleAnswerChange}
             value="react"
           />
@@ -96,16 +108,16 @@ export default function Play({ data }: { data: Array<Questions> }) {
         <label>
           <input
             type="checkbox"
-            checked={answer === "vue"}
+            checked={answer === 'vue'}
             onChange={handleAnswerChange}
             value="vue"
-          />{" "}
+          />{' '}
           &nbsp;Vue
         </label>
         <label>
           <input
             type="checkbox"
-            checked={answer === "svelte"}
+            checked={answer === 'svelte'}
             onChange={handleAnswerChange}
             value="svelte"
           />

@@ -1,25 +1,26 @@
-import Play from "./game"
-import { PrismaClient } from "@prisma/client"
-
+import Play from './game';
+import { PrismaClient } from '@prisma/client';
 
 export default async function Page() {
-    const displayedComponent: null | React.ReactNode = null;
-    
-    const prisma = new PrismaClient();
+  const displayedComponent: null | React.ReactNode = null;
 
-    const quizz = await prisma.quizz.findUnique({ where: {
-        id: 1
-    }});
+  const prisma = new PrismaClient();
 
-    if (!quizz?.id) {
-        return null;
-    }
+  const quizz = await prisma.quizz.findUnique({
+    where: {
+      id: 1,
+    },
+  });
 
-    const data = await prisma.questions.findMany({ where: {
-        quizz_id: quizz.id
-    }});
+  if (!quizz?.id) {
+    return null;
+  }
 
-    return (
-        <Play data={data}></Play>
-    );
+  const data = await prisma.questions.findMany({
+    where: {
+      quizz_id: quizz.id,
+    },
+  });
+
+  return <Play data={data}></Play>;
 }

@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export default function Navbar() {
-    return (
-        <nav className="h-50 bg-gray-500 text-center align-middle">
-            <Link href="/">Home</Link>
-        </nav>
-    )
+  return (
+    <nav className="h-50 bg-blue-200 text-center align-middle">
+      <Link href="/">Home</Link>
+    </nav>
+  );
 }
