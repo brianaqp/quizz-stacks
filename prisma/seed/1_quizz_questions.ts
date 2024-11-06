@@ -26,16 +26,4 @@ async function main() {
     ],
   });
 
-  await prisma.entries.create({
-    data: {
-      id: 1,
-      quizz_id: 1,
-      angular: 4, // Respuesta puntuada para Angular
-      vue: 5, // Respuesta puntuada para Vue
-      svelte: 3, // Respuesta puntuada para Svelte
-      react: 4, // Respuesta puntuada para React
-    },
-  });
-}
-
 main();
