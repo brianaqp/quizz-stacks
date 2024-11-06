@@ -1,9 +1,6 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
-  const router = useRouter();
   return (
     <div
       className="text-center bg-blue-300 mt-[10%] w-[400px] 
@@ -14,12 +11,11 @@ export default function Home() {
           Are you ready for take the Quizz?
         </h1>
       </div>
-      <button
-        onClick={() => router.push('/playing')}
-        className="w-40 mx-auto px-auto border-2 bg-violet-800 text-white rounded-md"
-      >
-        Click me!
-      </button>
+      <Link href="/playing">
+        <button className="w-40 mx-auto px-auto border-2 bg-violet-800 text-white rounded-md">
+          Click me!
+        </button>
+      </Link>
     </div>
   );
 }

@@ -1,76 +1,64 @@
-// /app/api/saveData/route.js
-import { PrismaClient } from '@prisma/client';
-import { NextRequest } from 'next/server';
+import { $Enums, PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-type Options = 'vue' | 'angular' | 'react' | 'svelte';
 
 export async function GET(
   request: NextRequest,
   {
     params,
   }: {
-    params: Promise<{
-      id: string;
-    }>;
-  },
-) {
+    params: { id: string };
+  }
+): Promise<NextResponse> {
   try {
-    const id = (await params).id;
+    // Get the ID from the params
+    const { id } = await params;
 
-    const entry = await prisma.entries.findFirst({
+    // Fetch the entry from the database using Prisma
+    const entry = await prisma.entry.findFirst({
       where: {
-        id: +id,
+        id: +id, // Ensure ID is treated as a number
       },
     });
 
-    if (entry === null) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-        }),
-        {
-          status: 404,
-        },
+    // If no entry found, return a 404 response
+    if (!entry) {
+      return NextResponse.json(
+        { success: false },
+        { status: 404 }
       );
     }
 
+    // Variables to track the highest value
     let max = 0;
-    let top;
-    const props = [
-      'angular',
-      'vue',
-      'react',
-      'svelte',
-    ] as Options[];
+    let top: $Enums.FrameworkCategory | undefined;
+
+    // Check for the highest framework value
+    const props: $Enums.FrameworkCategory[] = ['angular', 'vue', 'react', 'svelte'];
+
     for (let prop of props) {
       const value = entry[prop];
-      if (entry[prop] > max) {
+      if (value > max) {
         max = value;
         top = prop;
       }
     }
 
-    return new Response(
-      JSON.stringify({
+    // Return the top framework as the response
+    return NextResponse.json(
+      {
         success: true,
         data: top,
-      }),
-      {
-        status: 200,
       },
+      { status: 200 }
     );
   } catch (error) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: 'Error',
-      }),
-      {
-        status: 500,
-      },
+    console.error(error);
+    return NextResponse.json(
+      { success: false, error: 'Error' },
+      { status: 500 }
     );
   }
 }

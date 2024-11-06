@@ -1,26 +1,43 @@
-import Play from './game';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
+import Play from './quizz';
+import ErrorPage from './error';
+
+const prisma = new PrismaClient();
+
+type QuizzTypePayload = Prisma.QuizzGetPayload<{
+  include: {
+    questions: {
+      include: {
+        options: true;
+      };
+    };
+  };
+}>;
+
+export type QuestionsWithOptions = QuizzTypePayload['questions'];
 
 export default async function Page() {
-  const displayedComponent: null | React.ReactNode = null;
-
-  const prisma = new PrismaClient();
+  const QUIZZ_ID = 1;
 
   const quizz = await prisma.quizz.findUnique({
     where: {
-      id: 1,
+      id: QUIZZ_ID,
     },
+    include: {
+      questions: {
+        include: {
+          options: true
+        }
+      }
+    }
   });
 
-  if (!quizz?.id) {
-    return null;
+  if (quizz === null || quizz.questions.length === 0) {
+    return <ErrorPage />;
   }
 
-  const data = await prisma.questions.findMany({
-    where: {
-      quizz_id: quizz.id,
-    },
-  });
+  // Aquí ya tienes las preguntas con sus opciones incluidas
+  const questionsWithOptions: QuestionsWithOptions = quizz.questions;
 
-  return <Play data={data}></Play>;
+  return <Play data={questionsWithOptions}></Play>;
 }
