@@ -68,7 +68,9 @@ export default function Play({
             if (res.status) {
               router.push('/finish?entryId=' + res.data.data.id);
             }
-          });
+          }).catch((reason) => {
+            console.error({ message: "Error trying to change route to finish", error: reason })
+          })
       } else {
         setAnswer(null);
         setIndex(nextId);

@@ -33,6 +33,7 @@ export default async function FinishPage({
   const { entryId } = await searchParams;
 
   if (!entryId) {
+    console.error("entryId is not defined")
     return <ErrorPage />;
   }
 

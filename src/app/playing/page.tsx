@@ -34,6 +34,7 @@ export default async function Page() {
   });
 
   if (quizz === null || quizz.questions.length === 0) {
+    console.error("Error trying to get quizz data")
     return <ErrorPage />;
   }
 
