@@ -45,7 +45,9 @@ export default async function Page() {
 
   return <Play data={questionsWithOptions}></Play>;
   } catch (error) {
-    console.error("Error trying to get quizz data")
+    console.error("Error trying to get quizz data", {
+      error
+    })
     return <ErrorPage />;
   }
 }
