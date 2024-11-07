@@ -50,7 +50,7 @@ export default function FinishContent({
   const winner = results[resultFramework] || results.react; // Default to React if not found
 
   return (
-    <div className="w-[600px] mx-auto mt-[25%] bg-blue-200 border-2 rounded-lg">
+    <div className="w-[600px] mx-auto mt-[10%] bg-blue-200 border-2 rounded-lg">
       <div className="title text-2xl ml-10 mt-5">
         Your framework! {winner.framework}
       </div>
