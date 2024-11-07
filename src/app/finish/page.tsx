@@ -19,6 +19,9 @@ async function fetchResultData(entryId: string) {
   const res = await api.get(`/api/results/${entryId}`);
 
   if (res.status >= 300) {
+    console.error("Error triying to access api/results", {
+      entryId
+    })
     throw new Error("Error trying to api/results/");
   };
 
