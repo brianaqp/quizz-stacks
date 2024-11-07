@@ -15,7 +15,7 @@ async function fetchResultData(entryId: string) {
 export default async function FinishPage({
   searchParams,
 }: {
-  searchParams: { entryId?: string };
+  searchParams: Promise<{ entryId?: string }>;
 }) {
   const { entryId } = await searchParams;
 

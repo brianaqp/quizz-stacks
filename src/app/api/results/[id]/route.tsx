@@ -8,7 +8,7 @@ export async function GET(
   {
     params,
   }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
   },
 ): Promise<NextResponse> {
   try {
@@ -42,7 +42,7 @@ export async function GET(
       'svelte',
     ];
 
-    for (let prop of props) {
+    for (const prop of props) {
       const value = entry[prop];
       if (value > max) {
         max = value;

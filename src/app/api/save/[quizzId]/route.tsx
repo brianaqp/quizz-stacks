@@ -16,7 +16,7 @@ export async function POST(
   {
     params,
   }: {
-    params: { quizzId: string };
+    params: Promise<{ quizzId: string }>;
   },
 ): Promise<NextResponse> {
   try {
