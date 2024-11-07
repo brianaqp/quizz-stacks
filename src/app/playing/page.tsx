@@ -18,7 +18,8 @@ export type QuestionsWithOptions =
   QuizzTypePayload['questions'];
 
 export default async function Page() {
-  const QUIZZ_ID = 1;
+  try {
+    const QUIZZ_ID = 1;
 
   const quizz = await prisma.quizz.findUnique({
     where: {
@@ -43,4 +44,8 @@ export default async function Page() {
     quizz.questions;
 
   return <Play data={questionsWithOptions}></Play>;
+  } catch (error) {
+    console.error("Error trying to get quizz data")
+    return <ErrorPage />;
+  }
 }
