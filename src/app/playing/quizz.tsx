@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 import { QuestionsWithOptions } from './page'; // Importamos el tipo QuestionsWithOptions
 import { $Enums } from '@prisma/client';
+import api from  "@/app/api/axios";
+import { AxiosResponse } from 'axios';
 
 export default function Play({
   data,
@@ -62,14 +64,10 @@ export default function Play({
         // If it's the last question, submit the results
         const url = '/api/save/' + data[0].quizz_id;
 
-        fetch(url, {
-          method: 'POST',
-          body: JSON.stringify(result),
-        })
-          .then((res) => res.json())
+        api.post("/api/save/" + data[0].quizz_id, result)
           .then((res) => {
-            if (res.success) {
-              router.push('/finish?entryId=' + res.data.id);
+            if (res.status) {
+              router.push('/finish?entryId=' + res.data.data.id);
             }
           });
       } else {

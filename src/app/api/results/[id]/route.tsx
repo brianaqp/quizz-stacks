@@ -11,6 +11,7 @@ export async function GET(
     params: Promise<{ id: string }>;
   },
 ): Promise<NextResponse> {
+  console.log("Inside route ->")
   try {
     // Get the ID from the params
     const { id } = await params;
