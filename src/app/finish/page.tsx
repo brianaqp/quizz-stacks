@@ -43,8 +43,8 @@ export default async function FinishPage({
     return (
       <FinishContent resultFramework={resultFramework} />
     );
-  } catch (error: any) {
-    console.error(error.message)
+  } catch (error) {
+    console.error(error)
     return <ErrorPage />;
   }
 }
